@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    internal class Layer
+    public class Layer
     {
         public Neuron[] Neurons { get; }
         public double[] Outputs { get; }

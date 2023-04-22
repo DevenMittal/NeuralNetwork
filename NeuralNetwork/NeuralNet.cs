@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    internal class NeuralNet
+    public class NeuralNet
     {
         public Layer[] layers;
         ErrorFunction errorFunc;
@@ -16,7 +16,7 @@ namespace NeuralNetwork
         {          
             this.errorFunc = errorFunc;
             Layer previous = null;
-            for (int i = 0; i < layers.Length; i++)
+            for (int i = 0; i < neuronsPerLayer.Length; i++)
             {
                 layers[i] = new Layer(activation, neuronsPerLayer[i], previous);
                 previous = layers[i];

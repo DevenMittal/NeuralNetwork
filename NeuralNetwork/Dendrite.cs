@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    internal class Dendrite
+    public class Dendrite
     {
         public Neuron Previous { get; }
         public Neuron Next { get; }

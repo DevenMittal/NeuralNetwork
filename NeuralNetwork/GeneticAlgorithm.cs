@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    internal class GeneticAlgorithm
+    public class GeneticAlgorithm
     {
         public void Mutate(NeuralNet net, Random random, double mutationRate)
         {
@@ -72,7 +72,26 @@ namespace NeuralNetwork
             }
         }
 
+        public void Train((NeuralNet net, double fitness)[] population, Random random, double mutationRate)
+        {
+            Array.Sort(population, (a, b) => b.fitness.CompareTo(a.fitness));
 
+            int start = (int)(population.Length * 0.1);
+            int end = (int)(population.Length * 0.9);
+
+            //Notice that this process is only called on networks in the middle 80% of the array
+            for (int i = start; i < end; i++)
+            {
+                Crossover(population[random.Next(start)].net, population[i].net, random);
+                Mutate(population[i].net, random, mutationRate);
+            }
+
+            //Removes the worst performing networks
+            for (int i = end; i < population.Length; i++)
+            {
+                population[i].net.Randomize(random, 0, 1.0);
+            }
+        }
 
 
 
