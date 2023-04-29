@@ -19,10 +19,17 @@ namespace NeuralNetwork
         public Neuron(ActivationFunction activation, Neuron[] previousNerons) 
         {  
             Activation = activation;
-            dendrites = new Dendrite[previousNerons.Length];
-            for (int i = 0; i < dendrites.Length; i++)
+            if (previousNerons != null)
             {
-                dendrites[i] = new Dendrite(previousNerons[i], this, 0);
+                dendrites = new Dendrite[previousNerons.Length];
+                for (int i = 0; i < dendrites.Length; i++)
+                {
+                    dendrites[i] = new Dendrite(previousNerons[i], this, 0);
+                }
+            }
+            else
+            {
+                dendrites = null;
             }
         }
         public void Randomize(Random random, double min, double max)

@@ -10,36 +10,41 @@ namespace NeuralNetwork
     {
         public void Mutate(NeuralNet net, Random random, double mutationRate)
         {
+            int count = 0;
             foreach (Layer layer in net.layers)
             {
-                foreach (Neuron neuron in layer.Neurons)
+                count++;
+                if (count != 1)
                 {
-                    //Mutate the Weights
-                    for (int i = 0; i < neuron.dendrites.Length; i++)
+                    foreach (Neuron neuron in layer.Neurons)
                     {
+                        //Mutate the Weights
+                        for (int i = 0; i < neuron.dendrites.Length; i++)
+                        {
+                            if (random.NextDouble() < mutationRate)
+                            {
+                                if (random.Next(2) == 0)
+                                {
+                                    neuron.dendrites[i].Weight *= random.NextDouble() * (1.5 - .5) + .5; //scale weight
+                                }
+                                else
+                                {
+                                    neuron.dendrites[i].Weight *= -1; //flip sign
+                                }
+                            }
+                        }
+
+                        //Mutate the Bias
                         if (random.NextDouble() < mutationRate)
                         {
                             if (random.Next(2) == 0)
                             {
-                                neuron.dendrites[i].Weight *= random.NextDouble() * (1.5 - .5) + .5; //scale weight
+                                neuron.bias *= random.NextDouble() * (1.5 - .5) + .5; //scale weight
                             }
                             else
                             {
-                                neuron.dendrites[i].Weight *= -1; //flip sign
+                                neuron.bias *= -1; //flip sign
                             }
-                        }
-                    }
-
-                    //Mutate the Bias
-                    if (random.NextDouble() < mutationRate)
-                    {
-                        if (random.Next(2) == 0)
-                        {
-                            neuron.bias *= random.NextDouble() * (1.5 - .5) + .5; //scale weight
-                        }
-                        else
-                        {
-                            neuron.bias *= -1; //flip sign
                         }
                     }
                 }
@@ -47,7 +52,7 @@ namespace NeuralNetwork
         }
         public void Crossover(NeuralNet winner, NeuralNet loser, Random random)
         {
-            for (int i = 0; i < winner.layers.Length; i++)
+            for (int i = 1; i < winner.layers.Length; i++)
             {
                 //References to the Layers
                 Layer winLayer = winner.layers[i];
@@ -64,10 +69,14 @@ namespace NeuralNetwork
                     Neuron childNeuron = childLayer.Neurons[j];
 
                     //Copy the winners Weights and Bias into the loser/child neuron
-                    winNeuron.dendrites.CopyTo(childNeuron.dendrites, 0);
+                    //winNeuron.dendrites.CopyTo(childNeuron.dendrites, 0);
                     //IS it OK to just COPY the Dentrites
 
                     childNeuron.bias = winNeuron.bias;
+                    for (int d = 0; d < winNeuron.dendrites.Length; d++)
+                    {
+                        childNeuron.dendrites[d].Weight = winNeuron.dendrites[d].Weight;
+                    }
                 }
             }
         }

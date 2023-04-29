@@ -1,4 +1,5 @@
 using NeuralNetwork;
+using System;
 using System.Windows.Forms;
 
 
@@ -16,9 +17,11 @@ namespace GraphSin
         Pen drawingPen;
         NeuralNet net;
         GeneticAlgorithm geneticLearning;
-        double[] outputs;
-        double[] trainInputs;
+        double[][] outputs;
+        double[][] trainInputs;
         int[] neuronsPerLayer;
+        double[][] DrawInputs;
+        (NeuralNet net, double fitness)[] population;
         Func<double, double> functionTan;
         Func<double, double> derivativeTan;
         Func<double, double, double> errorFunc;
@@ -49,72 +52,98 @@ namespace GraphSin
 
             activationFunction = new ActivationFunction(functionTan, derivativeTan);
             errorFunction = new ErrorFunction(errorFunc, errorFunctionDerivative);
-            neuronsPerLayer = new int[]{ 10, 10, 10, 10 };
+            neuronsPerLayer = new int[]{ 1, 10, 10, 1 };
 
             // net = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
             geneticLearning = new GeneticAlgorithm();
-            trainInputs = new double[] 
-             {
-                0,
-                Math.PI/6,
-                Math.PI/4,
-                Math.PI/3,
-                Math.PI/4,
-                2*Math.PI/3,
-                3*Math.PI/4,
-                5*Math.PI/6,
-                Math.PI,
-                7*Math.PI/6,
-                5*Math.PI/4,
-                4*Math.PI/3,
-                3*Math.PI/2,
-                5*Math.PI/3,
-                7*Math.PI/4,
-                11*Math.PI/6,
-                2*Math.PI,
-
-            };
-            outputs = new double[]
+            trainInputs = new double[17][];
+            for (int i = 0; i < trainInputs.Length; i++)
             {
-                0,
-                1 / 2,
-                2 * Math.Sqrt(2),
-                3 * Math.Sqrt(2),
-                1,
-                3 * Math.Sqrt(2),
-                2 * Math.Sqrt(2),
-                1 / 2,
-                0,
-                 -1 / 2,
-                 -2 * Math.Sqrt(2),
-                 -3 * Math.Sqrt(2),
-                 -1,
-                 -3 * Math.Sqrt(2),
-                 -2 * Math.Sqrt(2),
-                 -1 / 2,
-                0,
-            };
+                trainInputs[i] = new double[] { (double)i * Math.PI / 6 };
+            }
+            //{
+            //    0,
+            //    Math.PI/6,
+            //    Math.PI/4,
+            //    Math.PI/3,
+            //    Math.PI/4,
+            //    2*Math.PI/3,
+            //    3*Math.PI/4,
+            //    5*Math.PI/6,
+            //    Math.PI,
+            //    7*Math.PI/6,
+            //    5*Math.PI/4,
+            //    4*Math.PI/3,
+            //    3*Math.PI/2,
+            //    5*Math.PI/3,
+            //    7*Math.PI/4,
+            //    11*Math.PI/6,
+            //    2*Math.PI,
 
-            for (int i = 0; i < 10000; i++)
+            //};
+            outputs = new double[17][];
+            for (int i = 0; i < trainInputs.Length; i++)
             {
+                outputs[i] = new double[] { Math.Sin(trainInputs[i][0]) };
+            }
+            //{
+            //    0,
+            //    1 / 2,
+            //    2 * Math.Sqrt(2),
+            //    3 * Math.Sqrt(2),
+            //    1,
+            //    3 * Math.Sqrt(2),
+            //    2 * Math.Sqrt(2),
+            //    1 / 2,
+            //    0,
+            //     -1 / 2,
+            //     -2 * Math.Sqrt(2),
+            //     -3 * Math.Sqrt(2),
+            //     -1,
+            //     -3 * Math.Sqrt(2),
+            //     -2 * Math.Sqrt(2),
+            //     -1 / 2,
+            //    0,
+            //};
+
+
+            DrawInputs = new double[200][];
+            for (int i = 0; i < DrawInputs.Length; i++)
+            {
+                DrawInputs[i] = new double[1];
+            }
+            for (int i = 0; i < DrawInputs.Length; i++)
+            {
+                DrawInputs[i][0] = 2.0 * (double)i * Math.PI / (double)DrawInputs.Length;
             }
 
+            population = new (NeuralNet net, double fitness)[10];
 
+
+            for (int i = 0; i < population.Length; i++)
+            {
+                NeuralNet net = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
+                for (int j = 0; j < trainInputs.Length; j++)
+                {
+                    population[i] = (net, net.GetError(trainInputs[i], outputs[i]));
+                }
+            }
         }
 
-        public void DrawPoints()
+        public void DrawPoints(NeuralNet net)
         {
             gfx.Clear(Color.White);
             //for (int i = 0; i < points.Count; i++)
             //{
             //    gfx.DrawEllipse(drawingPen, (float)points[i].x + pictureBox1.Width / 2, pictureBox1.Height / 2 - (float)points[i].y, 3, 3);
             //}
-            double[] DrawInputs = new double[200];
+
             for (int i = 0; i < DrawInputs.Length; i++)
             {
-                DrawInputs[i] = 2.0 * (double)i * Math.PI / (double)DrawInputs.Length;
+                double[] outputs = net.Compute(DrawInputs[i]);
+                gfx.DrawEllipse(drawingPen, (float)DrawInputs[i][0] + pictureBox1.Width / 2, pictureBox1.Height / 2 - (float)outputs[0], 1, 1);
             }
-
+            
 
             DrawAxis();
             //gfx.DrawLine(drawingPen, new Point(-pictureBox1.Width / 2 + pictureBox1.Width / 2, (pictureBox1.Height / 2 + (int)((-perceptron.weights[0] / perceptron.weights[1]) * -pictureBox1.Width / 2 - perceptron.bias / perceptron.weights[1]))), new Point(pictureBox1.Width / 2 + pictureBox1.Width / 2, (pictureBox1.Height / 2 + (int)((-perceptron.weights[0] / perceptron.weights[1]) * pictureBox1.Width / 2 - perceptron.bias / perceptron.weights[1]))));
@@ -161,19 +190,9 @@ namespace GraphSin
         {
            
 
-            (NeuralNet net, double fitness)[] population = new (NeuralNet net, double fitness)[10];
-            
-            
-
-            for (int i = 0; i < population.Length; i++)
-            {
-                NeuralNet net = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
-                population[i] = (net, net.GetError(trainInputs, outputs));
-            }
-
             geneticLearning.Train(population, new Random(), 0.01);
 
-
+            DrawPoints(population[0].net);
 
         }
     }

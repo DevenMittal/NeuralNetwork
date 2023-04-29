@@ -16,10 +16,15 @@ namespace NeuralNetwork
         public Layer(ActivationFunction activation, int neuronCount, Layer previousLayer)
         {
             Neurons = new Neuron[neuronCount];
+            Neuron[] previousNeurons = null;
 
+            if (previousLayer != null)
+            {
+                previousNeurons = previousLayer.Neurons;
+            }
             for (int i = 0; i < Neurons.Length; i++)
             {
-                Neurons[i] = new Neuron(activation, previousLayer.Neurons);
+                Neurons[i] = new Neuron(activation, previousNeurons);
             }
 
             Outputs = new double[Neurons.Length];
