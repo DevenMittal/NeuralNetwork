@@ -26,6 +26,7 @@ namespace NeuralNetwork
                 {
                     dendrites[i] = new Dendrite(previousNerons[i], this, 0);
                 }
+                Randomize(new Random(), -1.0, 1.0);
             }
             else
             {
@@ -45,6 +46,10 @@ namespace NeuralNetwork
             for (int i = 0; i < dendrites.Length; i++)
             {
                 Input += dendrites[i].Compute();
+            }
+            if (Input<0)
+            {
+                ;
             }
             Output = Activation.Function(Input);
             return  Output;

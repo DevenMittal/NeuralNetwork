@@ -47,6 +47,10 @@ namespace NeuralNetwork
             {
                 outputs = layers[i].Compute();
             }
+            if (outputs[0] < 0)
+            {
+                ;
+            }
             return outputs;
         }
         public double GetError(double[] inputs, double[] desiredOutputs)

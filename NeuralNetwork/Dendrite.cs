@@ -20,6 +20,10 @@ namespace NeuralNetwork
         }
         public double Compute()
         {
+            if (Previous.Output*Weight <0)
+            {
+                ;
+            }
             return Previous.Output * Weight;
         }
     }

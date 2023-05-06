@@ -98,7 +98,7 @@ namespace NeuralNetwork
             //Removes the worst performing networks
             for (int i = end; i < population.Length; i++)
             {
-                population[i].net.Randomize(random, 0, 1.0);
+                population[i].net.Randomize(random, -1.0, 1.0);
             }
         }
 

@@ -56,10 +56,10 @@ namespace GraphSin
 
             // net = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
             geneticLearning = new GeneticAlgorithm();
-            trainInputs = new double[17][];
+            trainInputs = new double[40][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
-                trainInputs[i] = new double[] { (double)i * Math.PI / 6 };
+                trainInputs[i] = new double[] { (double)i * .1 };
             }
             //{
             //    0,
@@ -81,7 +81,7 @@ namespace GraphSin
             //    2*Math.PI,
 
             //};
-            outputs = new double[17][];
+            outputs = new double[40][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
                 outputs[i] = new double[] { Math.Sin(trainInputs[i][0]) };
@@ -117,7 +117,7 @@ namespace GraphSin
                 DrawInputs[i][0] = 2.0 * (double)i * Math.PI / (double)DrawInputs.Length;
             }
 
-            population = new (NeuralNet net, double fitness)[10];
+            population = new (NeuralNet net, double fitness)[100];
 
 
             for (int i = 0; i < population.Length; i++)
@@ -125,7 +125,7 @@ namespace GraphSin
                 NeuralNet net = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
                 for (int j = 0; j < trainInputs.Length; j++)
                 {
-                    population[i] = (net, net.GetError(trainInputs[i], outputs[i]));
+                    population[i] = (net, net.GetError(trainInputs[j], outputs[j]));
                 }
             }
         }
@@ -141,9 +141,11 @@ namespace GraphSin
             for (int i = 0; i < DrawInputs.Length; i++)
             {
                 double[] outputs = net.Compute(DrawInputs[i]);
-                gfx.DrawEllipse(drawingPen, (float)DrawInputs[i][0] + pictureBox1.Width / 2, pictureBox1.Height / 2 - (float)outputs[0], 1, 1);
+                gfx.DrawEllipse(drawingPen, (float)DrawInputs[i][0]*40 + pictureBox1.Width / 2, pictureBox1.Height / 2 - (float)outputs[0]*40, 1, 1);
             }
-            
+
+           
+
 
             DrawAxis();
             //gfx.DrawLine(drawingPen, new Point(-pictureBox1.Width / 2 + pictureBox1.Width / 2, (pictureBox1.Height / 2 + (int)((-perceptron.weights[0] / perceptron.weights[1]) * -pictureBox1.Width / 2 - perceptron.bias / perceptron.weights[1]))), new Point(pictureBox1.Width / 2 + pictureBox1.Width / 2, (pictureBox1.Height / 2 + (int)((-perceptron.weights[0] / perceptron.weights[1]) * pictureBox1.Width / 2 - perceptron.bias / perceptron.weights[1]))));
@@ -188,7 +190,31 @@ namespace GraphSin
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-           
+            for (int h = 0; h < population.Length; h++)
+            {
+                for (int i = 1; i < population[h].net.layers.Length; i++)
+                {
+                    for (int j = 0; j < population[h].net.layers[i].Neurons.Length; j++)
+                    {
+                        for (int k = 0; k < population[h].net.layers[i].Neurons[j].dendrites.Length; k++)
+                        {
+                            if (population[h].net.layers[i].Neurons[j].dendrites[k].Weight < 0)
+                            {
+                                ;
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < population.Length; i++)
+            {
+                for (int j = 0; j < trainInputs.Length; j++)
+                {
+                    population[i] = (population[i].net, population[i].net.GetError(trainInputs[j], outputs[j]));
+                }
+            }
+
+
 
             geneticLearning.Train(population, new Random(), 0.01);
 
