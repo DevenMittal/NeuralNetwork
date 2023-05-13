@@ -84,7 +84,7 @@ namespace NeuralNetwork
         public void Train((NeuralNet net, double fitness)[] population, Random random, double mutationRate)
         {
             Array.Sort(population, (a, b) => b.fitness.CompareTo(a.fitness));
-
+            //population =  population.OrderByDescending((p) => p.fitness).ToArray();
             int start = (int)(population.Length * 0.1);
             int end = (int)(population.Length * 0.9);
 

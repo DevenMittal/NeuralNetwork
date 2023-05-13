@@ -57,7 +57,7 @@ namespace NeuralNetwork
         {
             double sum = 0;
             double[] results = Compute(inputs);
-            for (int i = 0; i < inputs.Length; i++)
+            for (int i = 0; i < results.Length; i++)
             {
                 sum += errorFunc.Function(results[i], desiredOutputs[i]);
             }
