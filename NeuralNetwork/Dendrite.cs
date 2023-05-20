@@ -11,6 +11,8 @@ namespace NeuralNetwork
         public Neuron Previous { get; }
         public Neuron Next { get; }
         public double Weight { get; set; }
+        public double WeightUpdate { get; set; }
+
 
         public Dendrite(Neuron previous, Neuron next, double weight)
         {
@@ -18,6 +20,14 @@ namespace NeuralNetwork
             Next = next; 
             Weight = weight;
         }
+
+
+        public void ApplyUpdates()
+        {
+
+        }
+
+
         public double Compute()
         {
             if (Previous.Output*Weight <0)

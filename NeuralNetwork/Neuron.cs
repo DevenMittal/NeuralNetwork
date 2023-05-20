@@ -15,6 +15,11 @@ namespace NeuralNetwork
         public double Output { get; set; }
         public double Input { get; private set; }
         public ActivationFunction Activation { get; set; }
+        public double Delta { get; set; }
+
+        double biasUpdate;
+
+
 
         public Neuron(ActivationFunction activation, Neuron[] previousNerons) 
         {  
@@ -33,6 +38,22 @@ namespace NeuralNetwork
                 dendrites = null;
             }
         }
+
+
+        public void ApplyUpdates()
+        {
+
+        }
+
+
+        public void Backprop(double learningRate)
+        {
+
+        }
+
+
+
+
         public void Randomize(Random random, double min, double max)
         {
             for (int i = 0; i < dendrites.Length; i++)

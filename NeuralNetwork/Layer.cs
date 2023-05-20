@@ -29,6 +29,20 @@ namespace NeuralNetwork
 
             Outputs = new double[Neurons.Length];
         }
+
+
+        public void ApplyUpdates()
+        {
+
+        }
+
+        public void Backprop(double learningRate)
+        {
+
+        }
+        
+
+
         public void Randomize(Random random, double min, double max)
         {
             for (int i = 0; i < Neurons.Length; i++)

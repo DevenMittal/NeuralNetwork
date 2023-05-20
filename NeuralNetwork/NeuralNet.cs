@@ -63,5 +63,19 @@ namespace NeuralNetwork
             }
             return sum;
         }
+
+        void Backprop(double learningRate, double[] desiredOutputs)
+        {
+
+        }
+        public double TrainGradientDescent(double[][] inputs, double[][] desiredOutputs, double learingRate)
+        {
+
+        }
+
+
+
+
+
     }
 }

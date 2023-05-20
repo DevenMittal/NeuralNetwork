@@ -81,7 +81,7 @@ namespace NeuralNetwork
             }
         }
 
-        public void Train((NeuralNet net, double fitness)[] population, Random random, double mutationRate)
+        public void TrainGeneticLearning((NeuralNet net, double fitness)[] population, Random random, double mutationRate)
         {
             Array.Sort(population, (a, b) => a.fitness.CompareTo(b.fitness));
             //population =  population.OrderByDescending((p) => p.fitness).ToArray();
