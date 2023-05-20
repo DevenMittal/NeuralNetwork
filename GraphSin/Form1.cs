@@ -61,7 +61,7 @@ namespace GraphSin
             trainInputs = new double[40][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
-                trainInputs[i] = new double[] { (double)i * .1 };
+                trainInputs[i] = new double[] {( (double)i * .1) };
             }
             
             outputs = new double[40][];
@@ -172,22 +172,6 @@ namespace GraphSin
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            for (int h = 0; h < population.Length; h++)
-            {
-                for (int i = 1; i < population[h].net.layers.Length; i++)
-                {
-                    for (int j = 0; j < population[h].net.layers[i].Neurons.Length; j++)
-                    {
-                        for (int k = 0; k < population[h].net.layers[i].Neurons[j].dendrites.Length; k++)
-                        {
-                            if (population[h].net.layers[i].Neurons[j].dendrites[k].Weight < 0)
-                            {
-                                ;
-                            }
-                        }
-                    }
-                }
-            }
             for (int i = 0; i < population.Length; i++)
             {
                 for (int j = 0; j < trainInputs.Length; j++)
@@ -196,7 +180,27 @@ namespace GraphSin
                 }
             }
 
+            geneticLearning.Train(population, new Random(), 0.01);
 
+            DrawPoints(population[0].net);
+
+
+            //for (int h = 0; h < population.Length; h++)
+            //{
+            //    for (int i = 1; i < population[h].net.layers.Length; i++)
+            //    {
+            //        for (int j = 0; j < population[h].net.layers[i].Neurons.Length; j++)
+            //        {
+            //            for (int k = 0; k < population[h].net.layers[i].Neurons[j].dendrites.Length; k++)
+            //            {
+            //                if (population[h].net.layers[i].Neurons[j].dendrites[k].Weight < 0)
+            //                {
+            //                    ;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             //double[][] orInputs =
             //{
@@ -214,17 +218,13 @@ namespace GraphSin
             //    new double[] {1 }
             //};
             //population2 = new (NeuralNet net, double fitness)[100];
-            
+
             //for (int j = 0; j < trainInputs.Length; j++)
             //{
             //    population2[0] = (net, net.GetError(orInputs[j], orOutputs[j]));
             //}
             //geneticLearning.Train(population2, new Random(), 0.01);
 
-
-            geneticLearning.Train(population, new Random(), 0.01);
-
-            DrawPoints(population[population.Length-1].net);
 
         }
     }

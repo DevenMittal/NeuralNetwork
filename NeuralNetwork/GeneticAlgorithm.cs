@@ -25,7 +25,7 @@ namespace NeuralNetwork
                             {
                                 if (random.Next(2) == 0)
                                 {
-                                    neuron.dendrites[i].Weight *= random.NextDouble() * (1.5 - .5) + .5; //scale weight
+                                    neuron.dendrites[i].Weight *= random.NextDouble() * (2.5 - .5) + .5; //scale weight
                                 }
                                 else
                                 {
@@ -39,7 +39,7 @@ namespace NeuralNetwork
                         {
                             if (random.Next(2) == 0)
                             {
-                                neuron.bias *= random.NextDouble() * (1.5 - .5) + .5; //scale weight
+                                neuron.bias *= random.NextDouble() * (2.5 - .5) + .5; //scale weight
                             }
                             else
                             {
