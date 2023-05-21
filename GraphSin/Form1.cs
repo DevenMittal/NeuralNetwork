@@ -24,6 +24,7 @@ namespace GraphSin
         int[] neuronsPerLayer;
 
         (NeuralNet net, double fitness)[] population;
+        NeuralNet network;
 
         Func<double, double> functionTan;
         Func<double, double> derivativeTan;
@@ -36,7 +37,7 @@ namespace GraphSin
         private void Form1_Load(object sender, EventArgs e)
         {
             canvas = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            timer1.Enabled= true;
+            timer1.Enabled = true;
 
             drawingPen = new Pen(Brushes.Black, 2);
 
@@ -56,21 +57,23 @@ namespace GraphSin
 
             activationFunction = new ActivationFunction(functionTan, derivativeTan);
             errorFunction = new ErrorFunction(errorFunc, errorFunctionDerivative);
-            neuronsPerLayer = new int[]{ 1, 5,5,5, 5, 5, 1 };
+            neuronsPerLayer = new int[] { 1, 5, 5, 1 };
+            network = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
+
 
             geneticLearning = new GeneticAlgorithm();
             trainInputs = new double[50][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
-                trainInputs[i] = new double[] {( (double)i * (double)(Math.PI/4))};
+                trainInputs[i] = new double[] { ((double)i * (double)(Math.PI / 4)) };
             }
-            
+
             outputs = new double[50][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
                 outputs[i] = new double[] { Math.Sin(trainInputs[i][0]) };
             }
-           
+
             DrawInputs = new double[600][];
             for (int i = 0; i < DrawInputs.Length; i++)
             {
@@ -78,7 +81,7 @@ namespace GraphSin
             }
             for (int i = 0; i < DrawInputs.Length; i++)
             {
-                DrawInputs[i][0] = 2.0 * (double)i * 10*Math.PI / (double)DrawInputs.Length;
+                DrawInputs[i][0] = 2.0 * (double)i * 10 * Math.PI / (double)DrawInputs.Length;
             }
 
             population = new (NeuralNet net, double fitness)[100];
@@ -101,22 +104,26 @@ namespace GraphSin
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            for (int k = 0; k < 1; k++)
+
+            for (int i = 0; i < population.Length; i++)
             {
-                for (int i = 0; i < population.Length; i++)
+                double error = 0;
+                for (int j = 0; j < trainInputs.Length; j++)
                 {
-                    double error = 0;
-                    for (int j = 0; j < trainInputs.Length; j++)
-                    {
-                        error += population[i].net.GetError(trainInputs[j], outputs[j]);
-                    }
-                    population[i] = (population[i].net, error);
-
+                    error += population[i].net.GetError(trainInputs[j], outputs[j]);
                 }
+                population[i] = (population[i].net, error);
 
-                geneticLearning.TrainGeneticLearning(population, new Random(), 0.01);
             }
-            DrawPoints(population[0].net);
+
+            geneticLearning.TrainGeneticLearning(population, new Random(), 0.01);
+
+            network.TrainGradientDescent(trainInputs, outputs, .01);
+
+
+
+
+            DrawPoints(network);
 
 
         }

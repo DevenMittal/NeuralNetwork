@@ -10,7 +10,6 @@ namespace NeuralNetwork
     {
         public Layer[] layers;
         ErrorFunction errorFunc;
-       
 
         public NeuralNet(ActivationFunction activation, ErrorFunction errorFunc, params int[] neuronsPerLayer)
         {          
@@ -66,13 +65,33 @@ namespace NeuralNetwork
 
         void Backprop(double learningRate, double[] desiredOutputs)
         {
-
+            for (int i = 0; i < layers[layers.Length-1].Neurons.Length; i++)
+            {
+                layers[layers.Length - 1].Neurons[i].Delta += errorFunc.Derivative(layers[layers.Length - 1].Neurons[i].Output, desiredOutputs[i]);
+            }
+            for (int i = layers.Length-1; i> 0;  i--)
+            {
+                layers[i].Backprop(learningRate);   
+            }
         }
-        //public double TrainGradientDescent(double[][] inputs, double[][] desiredOutputs, double learingRate)
-        //{
-
-        //}
-
+        public double TrainGradientDescent(double[][] inputs, double[][] desiredOutputs, double learingRate)
+        {
+            double totalError = 0;
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                totalError += GetError(inputs[i], desiredOutputs[i]);
+                Backprop(learingRate, inputs[i]);
+            }
+            ApplyUpdates();
+            return totalError;
+        }
+        public void ApplyUpdates()
+        {
+            for (int i = 1; i < layers.Length; i++)
+            {
+                layers[i].ApplyUpdates();
+            }
+        }
 
 
 
