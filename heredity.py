@@ -39,7 +39,7 @@ PROBS = {
 
 def main():
 
-    # Check for proper usage
+    # Check for proper usag
     if len(sys.argv) != 2:
         sys.exit("Usage: python heredity.py data.csv")
     people = load_data(sys.argv[1])
