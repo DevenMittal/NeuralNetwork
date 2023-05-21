@@ -68,10 +68,10 @@ namespace NeuralNetwork
         {
 
         }
-        public double TrainGradientDescent(double[][] inputs, double[][] desiredOutputs, double learingRate)
-        {
+        //public double TrainGradientDescent(double[][] inputs, double[][] desiredOutputs, double learingRate)
+        //{
 
-        }
+        //}
 
 
 

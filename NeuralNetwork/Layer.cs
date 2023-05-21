@@ -33,12 +33,18 @@ namespace NeuralNetwork
 
         public void ApplyUpdates()
         {
-
+            for (int i = 0; i < Neurons.Length; i++)
+            {
+                Neurons[i].ApplyUpdates();
+            }
         }
 
         public void Backprop(double learningRate)
         {
-
+            for (int i = 0; i < Neurons.Length; i++)
+            {
+                Neurons[i].Backprop(learningRate);
+            }
         }
         
 

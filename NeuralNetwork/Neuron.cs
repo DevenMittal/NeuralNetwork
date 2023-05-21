@@ -42,13 +42,23 @@ namespace NeuralNetwork
 
         public void ApplyUpdates()
         {
-
+            for (int i = 0; i < dendrites.Length; i++)
+            {
+                dendrites[i].ApplyUpdates();
+            }
         }
 
 
         public void Backprop(double learningRate)
         {
+            bias -= learningRate * Activation.Derivative(Input) * Delta;
 
+            for (int i = 0; i < dendrites.Length; i++)
+            {
+                dendrites[i].WeightUpdate -= Delta * Activation.Derivative(Input) * learningRate * dendrites[i].Previous.Output;
+                dendrites[i].Previous.Delta += Delta * Activation.Derivative(Input) * dendrites[i].Weight;
+            }
+            Delta = 0;
         }
 
 

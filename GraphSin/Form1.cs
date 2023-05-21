@@ -56,16 +56,16 @@ namespace GraphSin
 
             activationFunction = new ActivationFunction(functionTan, derivativeTan);
             errorFunction = new ErrorFunction(errorFunc, errorFunctionDerivative);
-            neuronsPerLayer = new int[]{ 1, 10,10,10, 1 };
+            neuronsPerLayer = new int[]{ 1, 5,5,5, 5, 5, 1 };
 
             geneticLearning = new GeneticAlgorithm();
-            trainInputs = new double[30][];
+            trainInputs = new double[50][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
                 trainInputs[i] = new double[] {( (double)i * (double)(Math.PI/4))};
             }
             
-            outputs = new double[30][];
+            outputs = new double[50][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
                 outputs[i] = new double[] { Math.Sin(trainInputs[i][0]) };
@@ -101,7 +101,7 @@ namespace GraphSin
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            for (int k = 0; k < 20; k++)
+            for (int k = 0; k < 1; k++)
             {
                 for (int i = 0; i < population.Length; i++)
                 {

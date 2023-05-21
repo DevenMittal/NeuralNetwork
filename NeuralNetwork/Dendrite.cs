@@ -24,7 +24,8 @@ namespace NeuralNetwork
 
         public void ApplyUpdates()
         {
-
+            Weight += WeightUpdate;
+            WeightUpdate = 0;
         }
 
 
