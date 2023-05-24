@@ -57,24 +57,25 @@ namespace GraphSin
 
             activationFunction = new ActivationFunction(functionTan, derivativeTan);
             errorFunction = new ErrorFunction(errorFunc, errorFunctionDerivative);
-            neuronsPerLayer = new int[] { 1, 5, 5, 1 };
+            neuronsPerLayer = new int[] { 1, 10,10, 10, 10, 1 };
             network = new NeuralNet(activationFunction, errorFunction, neuronsPerLayer);
 
 
             geneticLearning = new GeneticAlgorithm();
-            trainInputs = new double[50][];
+            trainInputs = new double[70][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
-                trainInputs[i] = new double[] { ((double)i * (double)(Math.PI / 4)) };
+                /*(double)(Math.PI / 4))*/
+                trainInputs[i] = new double[] { ((double)i * .2 )};
             }
 
-            outputs = new double[50][];
+            outputs = new double[70][];
             for (int i = 0; i < trainInputs.Length; i++)
             {
                 outputs[i] = new double[] { Math.Sin(trainInputs[i][0]) };
             }
 
-            DrawInputs = new double[600][];
+            DrawInputs = new double[1000][];
             for (int i = 0; i < DrawInputs.Length; i++)
             {
                 DrawInputs[i] = new double[1];
@@ -104,7 +105,7 @@ namespace GraphSin
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-
+            /*
             for (int i = 0; i < population.Length; i++)
             {
                 double error = 0;
@@ -117,14 +118,13 @@ namespace GraphSin
             }
 
             geneticLearning.TrainGeneticLearning(population, new Random(), 0.01);
-
-            network.TrainGradientDescent(trainInputs, outputs, .01);
-
-
-
+            */
+            for (int i = 0; i < 10; i++)
+            {
+                network.TrainGradientDescent(trainInputs, outputs, .01);
+            }
 
             DrawPoints(network);
-
 
         }
         public void DrawPoints(NeuralNet net)
@@ -134,7 +134,7 @@ namespace GraphSin
             for (int i = 0; i < DrawInputs.Length; i++)
             {
                 double[] outputs = net.Compute(DrawInputs[i]);
-                gfx.DrawEllipse(drawingPen, ((float)DrawInputs[i][0] * 10 + pictureBox1.Width / 2), pictureBox1.Height / 2 - (float)outputs[0] * 40, 1, 1);
+                gfx.DrawEllipse(drawingPen, ((float)DrawInputs[i][0] * 40 + pictureBox1.Width / 2), pictureBox1.Height / 2 - (float)outputs[0] * 60, 1, 1);
             }
 
             DrawAxis();

@@ -46,10 +46,7 @@ namespace NeuralNetwork
             {
                 outputs = layers[i].Compute();
             }
-            if (outputs[0] < 0)
-            {
-                ;
-            }
+           
             return outputs;
         }
         public double GetError(double[] inputs, double[] desiredOutputs)
@@ -65,6 +62,7 @@ namespace NeuralNetwork
 
         void Backprop(double learningRate, double[] desiredOutputs)
         {
+           
             for (int i = 0; i < layers[layers.Length-1].Neurons.Length; i++)
             {
                 layers[layers.Length - 1].Neurons[i].Delta += errorFunc.Derivative(layers[layers.Length - 1].Neurons[i].Output, desiredOutputs[i]);
@@ -73,6 +71,7 @@ namespace NeuralNetwork
             {
                 layers[i].Backprop(learningRate);   
             }
+            
         }
         public double TrainGradientDescent(double[][] inputs, double[][] desiredOutputs, double learingRate)
         {
@@ -80,7 +79,7 @@ namespace NeuralNetwork
             for (int i = 0; i < inputs.Length; i++)
             {
                 totalError += GetError(inputs[i], desiredOutputs[i]);
-                Backprop(learingRate, inputs[i]);
+                Backprop(learingRate, desiredOutputs[i]);
             }
             ApplyUpdates();
             return totalError;

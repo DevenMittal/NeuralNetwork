@@ -78,10 +78,7 @@ namespace NeuralNetwork
             {
                 Input += dendrites[i].Compute();
             }
-            if (Input<0)
-            {
-                ;
-            }
+            
             Output = Activation.Function(Input);
             return  Output;
         }
