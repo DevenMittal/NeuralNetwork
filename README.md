@@ -2,6 +2,28 @@
 
 I implemented a feedforward neural network in C#, including neurons, weighted connections, activation functions, and backpropagation. The console example learns XOR; a separate Windows Forms example draws a learned approximation of a sine wave.
 
+## Recorded learning run
+
+![XOR predictions over 100,000 training steps](docs/xor-learning.gif)
+
+I recorded this run using the original network implementation, with seed `42`, a **2 → 2 → 1** tanh network, and learning rate `0.01`. After 100,000 full-dataset training steps, predictions were approximately `0.000051, 0.994514, 0.994524, 0.000069` for inputs `00, 10, 01, 11`. The final sum of squared errors was `0.00006009`.
+
+The animation shows actual predictions sampled every 1,000 steps. Bar heights are clipped to the display range 0–1; the numbers show the raw predictions. It is a separate visualization of a recorded run, not a recording of the Windows application. XOR is a four-example training task, so these results are not a generalization benchmark. The full measurements are in [xor-training.csv](docs/xor-training.csv).
+
+Reproduce the bounded capture without changing the core algorithm:
+
+```sh
+dotnet build tools/CaptureXor/CaptureXor.csproj
+dotnet tools/CaptureXor/bin/Debug/net6.0/CaptureXor.dll > docs/xor-training.csv
+```
+
+The capture project links the existing C# implementation and replaces only the interactive console loop. Optional animation rendering uses macOS AppKit through Swift and FFmpeg, which were already installed on the recording machine. These tools are not needed to run the network:
+
+```sh
+swift tools/CaptureXor/render.swift docs/xor-training.csv /tmp/xor-frames
+ffmpeg -framerate 10 -i /tmp/xor-frames/frame-%03d.png -vf 'split[a][b];[a]palettegen[p];[b][p]paletteuse' -loop 0 docs/xor-learning.gif
+```
+
 ## A local XOR example
 
 The console example uses a **2 → 2 → 1** network, `tanh` activations, squared error, and a learning rate of `0.01`.
