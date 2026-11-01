@@ -1,0 +1,5 @@
+input_a,input_b,expected,observed_rounded
+0,0,0,0.0
+0,1,1,0.997
+1,0,1,0.997
+1,1,0,0.0
